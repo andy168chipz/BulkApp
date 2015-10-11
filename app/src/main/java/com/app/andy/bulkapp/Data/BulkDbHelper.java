@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class BulkDbHelper extends SQLiteOpenHelper {
 
 	private static final int DATABASE_VERSION = 1;
-	static final String DATABASE_NAME = "bulk.db";
+	public static final String DATABASE_NAME = "bulk.db";
 
 	public BulkDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -19,14 +19,14 @@ public class BulkDbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		final String SQL_CREATE_FOODS_TABLE = "CREATE TABLE" + BulkContract.FoodItemEntry.TABLE_NAME + " { " +
+		final String SQL_CREATE_FOODS_TABLE = "CREATE TABLE " + BulkContract.FoodItemEntry.TABLE_NAME + " ( " +
 				//ID
-				BulkContract.FoodItemEntry._ID + "INTEGER PRIMARY KEY AUTOINCREMENT," +
+				BulkContract.FoodItemEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 
 				//the column data associated with this food item id
-				BulkContract.FoodItemEntry.COLUMN_FOOD_KEY + " TEXT NOT NULL" +
-				BulkContract.FoodItemEntry.COLUMN_CALORIE_COUNT + "REAL NOT NULL" +
-				BulkContract.FoodItemEntry.COLUMN_DATE + "TEXT NOT NULL";
+				BulkContract.FoodItemEntry.COLUMN_FOOD_KEY + " TEXT NOT NULL, " +
+				BulkContract.FoodItemEntry.COLUMN_CALORIE_COUNT + " REAL NOT NULL, " +
+				BulkContract.FoodItemEntry.COLUMN_DATE + " TEXT NOT NULL); ";
 
 		//create the table
 		db.execSQL(SQL_CREATE_FOODS_TABLE);

@@ -10,18 +10,15 @@ public class MainActivity extends AppCompatActivity {
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		super.onCreate(savedInstanceState); setContentView(R.layout.activity_main);
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		ft.replace(R.id.placeholder, new MainFragment());
-		ft.commit();
+		ft.replace(R.id.placeholder, new MainFragment()); ft.commit();
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.menu_main, menu);
-		return true;
+		getMenuInflater().inflate(R.menu.menu_main, menu); return true;
 	}
 	
 	@Override
