@@ -34,6 +34,14 @@ public class BulkDbHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		//will update when needed
+//		if(newVersion > oldVersion){
+//			db.execSQL("ALTER TABLE "+BulkContract.FoodItemEntry.TABLE_NAME+" ADD COLUMN ");
+//		}
+		switch(oldVersion){
+			default:
+				return;
+		}
 
 	}
 

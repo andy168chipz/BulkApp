@@ -28,7 +28,8 @@ public class TestDb extends AndroidTestCase {
 	public void testCreateDb() throws Throwable {
 		mContext.deleteDatabase(BulkDbHelper.DATABASE_NAME);
 		SQLiteDatabase db = new BulkDbHelper(this.mContext).getWritableDatabase();
-		assertEquals(true, db.isOpen()); db.close();
+		assertEquals(true, db.isOpen());
+		db.close();
 	}
 
 	public void testInsertDb() {
@@ -50,9 +51,7 @@ public class TestDb extends AndroidTestCase {
 				null // sort order
 				//copied from Udacity guide
 		);
-
 		validateCursor(cursor, testValues);
-
 		dbHelper.close();
 	}
 
