@@ -38,17 +38,31 @@
         android:id="@+id/foodEditText"
         android:hint="Name of food item"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Calorie"
-        android:textSize="40sp"
-        android:id="@+id/calTextView"/>
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calorie"
+            android:textSize="40sp"
+            android:id="@+id/calTextView"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(Please only enter numbers)"
+            android:textSize="18sp"
+            android:paddingLeft="10sp"/>
+    </LinearLayout>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/calEditText"
+        android:inputType="numberDecimal"
         android:hint="Total calorie of food item"/>
 
     <Button

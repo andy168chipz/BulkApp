@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -24,11 +25,20 @@ public class MainFragment extends Fragment {
 
 	private Button submit;
 	private EditText foodNameEdit, calorieCountEdit;
+	private FoodItemDataSource dataSource;
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.main_fragment, container, false); init(view);
+		View view = inflater.inflate(R.layout.main_fragment, container, false);
+		dataSource = new FoodItemDataSource(getActivity());
+		try {
+			dataSource.open();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		init(view);
 		return view;
 	}
 
@@ -37,7 +47,7 @@ public class MainFragment extends Fragment {
 	 *
 	 * @param view
 	 */
-	public void init(View view) {
+	private void init(View view) {
 		TextView dateText = (TextView) view.findViewById(R.id.dateTextView);
 		DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
 		dateText.setText(format.format(new Date()));
@@ -47,18 +57,34 @@ public class MainFragment extends Fragment {
 		submit.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (foodNameEdit.getText().toString().equals("")) {
+				String foodName = foodNameEdit.getText().toString();
+				String calorieCount = calorieCountEdit.getText().toString();
+				if (foodName.equals("")) {
 					Toast.makeText(getActivity().getBaseContext(), "You didn't enter a food name!", Toast.LENGTH_SHORT).show();
 					return;
-				} else if (calorieCountEdit.getText().toString().equals("")) {
-					Toast.makeText(getActivity().getBaseContext(), "You didn't enter a calorie count!", Toast.LENGTH_SHORT).show();
-					return;
-				}
-				//do save action here
-				else {
-					Log.v("saveAction:", foodNameEdit.getText().toString() + " " + calorieCountEdit.getText().toString());
+				} else {
+					if (calorieCount.equals("")) {
+						Toast.makeText(getActivity().getBaseContext(), "You didn't enter a calorie count!", Toast.LENGTH_SHORT).show();
+						return;
+					}
+					//do save action here
+					else {
+						Log.v("saveAction:", foodName + " " + calorieCount);
+						Log.v("saveaction test", getDate());
+						FoodItem item = new FoodItem(foodName, Double.parseDouble(calorieCount), getDate());
+					}
 				}
 			}
 		});
 	}
+
+	private String getDate(){
+		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+		return	formatter.format(new Date()).toString();
+	}
+
+
+
+
+
 }
