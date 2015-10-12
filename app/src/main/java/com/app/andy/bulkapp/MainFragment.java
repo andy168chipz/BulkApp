@@ -1,8 +1,9 @@
 package com.app.andy.bulkapp;
 
-import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +24,26 @@ import java.util.Date;
  */
 public class MainFragment extends Fragment {
 
-	private Button submit;
+	private Button submit, showList;
 	private EditText foodNameEdit, calorieCountEdit;
 	private FoodItemDataSource dataSource;
+	private static final String LOG_TAG = "Bulk Fragment";
+	private ListShowListener showListener;
+
+	public static interface ListShowListener {
+		public void onListShow();
+	}
+
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		Log.e(LOG_TAG, "attached");
+		try{
+			showListener = (ListShowListener) context;
+		}catch (ClassCastException e){
+			throw new ClassCastException(context.toString() + " didnt implement!!!");
+		}
+	}
 
 	@Nullable
 	@Override
@@ -42,6 +60,22 @@ public class MainFragment extends Fragment {
 		return view;
 	}
 
+	@Override
+	public void onPause() {
+		dataSource.close();
+		super.onPause();
+	}
+
+	@Override
+	public void onResume() {
+		try {
+			dataSource.open();
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		super.onResume();
+	}
 	/**
 	 * Initilize the view
 	 *
@@ -54,37 +88,57 @@ public class MainFragment extends Fragment {
 		foodNameEdit = (EditText) view.findViewById(R.id.foodEditText);
 		calorieCountEdit = (EditText) view.findViewById(R.id.calEditText);
 		submit = (Button) view.findViewById(R.id.submitButton);
-		submit.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String foodName = foodNameEdit.getText().toString();
-				String calorieCount = calorieCountEdit.getText().toString();
-				if (foodName.equals("")) {
-					Toast.makeText(getActivity().getBaseContext(), "You didn't enter a food name!", Toast.LENGTH_SHORT).show();
-					return;
-				} else {
-					if (calorieCount.equals("")) {
-						Toast.makeText(getActivity().getBaseContext(), "You didn't enter a calorie count!", Toast.LENGTH_SHORT).show();
-						return;
-					}
-					//do save action here
-					else {
-						Log.v("saveAction:", foodName + " " + calorieCount);
-						Log.v("saveaction test", getDate());
-						FoodItem item = new FoodItem(foodName, Double.parseDouble(calorieCount), getDate());
+		showList = (Button) view.findViewById(R.id.showListButton);
+		submit.setOnClickListener(
+				new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						String foodName = foodNameEdit.getText().toString();
+						String calorieCount = calorieCountEdit.getText().toString();
+						if (foodName.equals("")) {
+							Toast.makeText(getActivity().getBaseContext(), "You didn't enter a food name!", Toast.LENGTH_SHORT).show();
+							return;
+						} else if (calorieCount.equals("")) {
+							Toast.makeText(getActivity().getBaseContext(), "You didn't enter a calorie count!", Toast.LENGTH_SHORT).show();
+							return;
+						}
+						//do save action
+						else {
+							FoodItem item = new FoodItem(foodName, Double.parseDouble(calorieCount), getDate());
+							long id = dataSource.insertFoodItem(item);
+							if (id == -1) {
+								Toast.makeText(getActivity().getBaseContext(), "There was an error inserting", Toast.LENGTH_SHORT).show();
+								Log.v("saveAction:", foodName + " " + calorieCount);
+							} else {
+								Log.v(LOG_TAG, "Insert successful" + id);
+							}
+						}
 					}
 				}
-			}
-		});
+
+		);
+		showList.setOnClickListener(
+				new View.OnClickListener(){
+					@Override
+					public void onClick(View v) {
+							Log.v(LOG_TAG, "show list out");
+						if(showListener !=null){
+							Log.v(LOG_TAG, "show list");
+							showListener.onListShow();
+						}
+					}
+				}
+		);
 	}
 
-	private String getDate(){
+	/**
+	 * Return appropriate date format
+	 * @return
+	 */
+	private String getDate() {
 		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
-		return	formatter.format(new Date()).toString();
+		return formatter.format(new Date()).toString();
 	}
-
-
-
 
 
 }

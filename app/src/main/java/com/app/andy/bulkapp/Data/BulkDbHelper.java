@@ -10,11 +10,22 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class BulkDbHelper extends SQLiteOpenHelper {
 
+	private static BulkDbHelper mDbHelper = null;
+	private Context mContext;
 	private static final int DATABASE_VERSION = 1;
 	public static final String DATABASE_NAME = "bulk.db";
 
+
+	public static BulkDbHelper getIntance(Context ctx){
+		if(mDbHelper == null){
+			mDbHelper = new BulkDbHelper(ctx.getApplicationContext());
+		}
+		return mDbHelper;
+	}
+
 	public BulkDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		this.mContext = context;
 	}
 
 	@Override

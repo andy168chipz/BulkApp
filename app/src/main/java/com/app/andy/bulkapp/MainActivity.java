@@ -1,18 +1,23 @@
 package com.app.andy.bulkapp;
 
-import android.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
-	
+public class MainActivity extends AppCompatActivity implements MainFragment.ListShowListener {
+	private FragmentTransaction ft;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState); setContentView(R.layout.activity_main);
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		ft.replace(R.id.placeholder, new MainFragment()); ft.commit();
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		ft = getSupportFragmentManager().beginTransaction();
+		ft.add(R.id.placeholder, new MainFragment());
+		ft.addToBackStack(null);
+		ft.commit();
 	}
 	
 	@Override
@@ -34,5 +39,13 @@ public class MainActivity extends AppCompatActivity {
 		}
 		
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onListShow() {
+		Fragment foodItemListView = new FoodItemListView();
+		ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.placeholder, foodItemListView);
+		ft.commit();
 	}
 }

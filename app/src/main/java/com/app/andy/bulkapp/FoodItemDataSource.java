@@ -28,7 +28,7 @@ public class FoodItemDataSource {
 	 * @param context
 	 */
 	public FoodItemDataSource(Context context) {
-		dbHelper = new BulkDbHelper(context);
+		dbHelper = BulkDbHelper.getIntance(context);
 	}
 
 	/**
@@ -73,9 +73,12 @@ public class FoodItemDataSource {
 		cursor.moveToFirst();
 
 		while (!cursor.isAfterLast()) {
-			FoodItem item = cursorToFoodItem(cursor); items.add(item);
+			FoodItem item = cursorToFoodItem(cursor);
+			items.add(item);
 			cursor.moveToNext();
-		} cursor.close(); return items;
+		}
+		cursor.close();
+		return items;
 	}
 
 	/**
@@ -86,10 +89,11 @@ public class FoodItemDataSource {
 	 */
 	private FoodItem cursorToFoodItem(Cursor cursor) {
 		FoodItem foodItem = new FoodItem();
-		foodItem.setId(cursor.getInt(0));
-		foodItem.setName(cursor.getString(1));
-		foodItem.setCalorie(cursor.getDouble(2));
-		foodItem.setDate(cursor.getString(3)); return foodItem;
+		foodItem.setId(cursor.getColumnIndex("_id"));
+		foodItem.setName(cursor.getString(0));
+		foodItem.setCalorie(cursor.getDouble(1));
+		foodItem.setDate(cursor.getString(2));
+		return foodItem;
 	}
 
 }
