@@ -19,6 +19,8 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:text="12345678901234567890"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:textSize="20sp"/>
 
         <View
@@ -35,6 +37,8 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="1234567"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:textSize="20sp"/>
 
         <View
@@ -50,6 +54,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="2015/10/13"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
             android:textSize="20sp"/>
 
     </LinearLayout>
