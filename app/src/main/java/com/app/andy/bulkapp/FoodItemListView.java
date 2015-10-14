@@ -3,7 +3,9 @@ package com.app.andy.bulkapp;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,6 +19,13 @@ public class FoodItemListView extends ListFragment {
 
 	private FoodItemDataSource dataSource;
 	private Context mContext;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View contentView = inflater.inflate(R.layout.list_view, container, false);
+		return contentView;
+	}
+
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -32,6 +41,7 @@ public class FoodItemListView extends ListFragment {
 		FoodItemArrayAdapter adapter = new FoodItemArrayAdapter(mContext , items);
 		setListAdapter(adapter);
 	}
+
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
