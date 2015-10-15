@@ -6,16 +6,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.ListShowListener {
 	private FragmentTransaction ft;
+	private MainFragment mainFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		ft = getSupportFragmentManager().beginTransaction();
-		ft.add(R.id.placeholder, new MainFragment());
+		ft.add(R.id.placeholder, mainFragment = new MainFragment());
 		ft.addToBackStack(null);
 		ft.commit();
 	}
@@ -45,7 +47,12 @@ public class MainActivity extends AppCompatActivity implements MainFragment.List
 	public void onListShow() {
 		Fragment foodItemListView = new FoodItemListView();
 		ft = getSupportFragmentManager().beginTransaction();
-		ft.replace(R.id.placeholder, foodItemListView);
+		ft.replace(R.id.placeholder, foodItemListView).addToBackStack("1");
 		ft.commit();
 	}
+
+	public void onClick(View v){
+		mainFragment.onClick(v);
+	}
+
 }

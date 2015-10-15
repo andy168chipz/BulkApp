@@ -71,12 +71,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"
+        android:onClick="onClick"
         android:id="@+id/submitButton"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/showListButton"
+        android:onClick="onClick"
         android:text="SHOW ALL LIST TEST"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/deleteAllButton"
+        android:onClick="onClick"
+        android:text="Delete all data(debug)"/>
 
 </LinearLayout>

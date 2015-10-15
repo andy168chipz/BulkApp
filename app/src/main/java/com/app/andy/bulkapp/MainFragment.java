@@ -87,48 +87,6 @@ public class MainFragment extends Fragment {
 		dateText.setText(format.format(new Date()));
 		foodNameEdit = (EditText) view.findViewById(R.id.foodEditText);
 		calorieCountEdit = (EditText) view.findViewById(R.id.calEditText);
-		submit = (Button) view.findViewById(R.id.submitButton);
-		showList = (Button) view.findViewById(R.id.showListButton);
-		submit.setOnClickListener(
-				new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						String foodName = foodNameEdit.getText().toString();
-						String calorieCount = calorieCountEdit.getText().toString();
-						if (foodName.equals("")) {
-							Toast.makeText(getActivity().getBaseContext(), "You didn't enter a food name!", Toast.LENGTH_SHORT).show();
-							return;
-						} else if (calorieCount.equals("")) {
-							Toast.makeText(getActivity().getBaseContext(), "You didn't enter a calorie count!", Toast.LENGTH_SHORT).show();
-							return;
-						}
-						//do save action
-						else {
-							FoodItem item = new FoodItem(foodName, Double.parseDouble(calorieCount), getDate());
-							long id = dataSource.insertFoodItem(item);
-							if (id == -1) {
-								Toast.makeText(getActivity().getBaseContext(), "There was an error inserting", Toast.LENGTH_SHORT).show();
-								Log.v("saveAction:", foodName + " " + calorieCount);
-							} else {
-								Log.v(LOG_TAG, "Insert successful" + id);
-							}
-						}
-					}
-				}
-
-		);
-		showList.setOnClickListener(
-				new View.OnClickListener(){
-					@Override
-					public void onClick(View v) {
-							Log.v(LOG_TAG, "show list out");
-						if(showListener !=null){
-							Log.v(LOG_TAG, "show list");
-							showListener.onListShow();
-						}
-					}
-				}
-		);
 	}
 
 	/**
@@ -140,5 +98,44 @@ public class MainFragment extends Fragment {
 		return formatter.format(new Date()).toString();
 	}
 
-
+	/**
+	 * The onClick listener
+	 * @param v
+	 */
+	public void onClick(View v){
+		switch(v.getId()){
+			case R.id.submitButton:
+				String foodName = foodNameEdit.getText().toString();
+				String calorieCount = calorieCountEdit.getText().toString();
+				if (foodName.equals("")) {
+					Toast.makeText(getActivity().getBaseContext(), "You didn't enter a food name!", Toast.LENGTH_SHORT).show();
+					return;
+				} else if (calorieCount.equals("")) {
+					Toast.makeText(getActivity().getBaseContext(), "You didn't enter a calorie count!", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				//do save action
+				else {
+					FoodItem item = new FoodItem(foodName, Double.parseDouble(calorieCount), getDate());
+					long id = dataSource.insertFoodItem(item);
+					if (id == -1) {
+						Toast.makeText(getActivity().getBaseContext(), "There was an error inserting", Toast.LENGTH_SHORT).show();
+						Log.v("saveAction:", foodName + " " + calorieCount);
+					} else {
+						Log.v(LOG_TAG, "Insert successful" + id);
+					}
+				}
+				break;
+			case R.id.showListButton:
+				if (showListener != null) {
+					showListener.onListShow();
+				}
+				break;
+			case R.id.deleteAllButton:
+				break;
+			default:
+				Log.e(LOG_TAG, "Invalid button");
+				throw new IllegalArgumentException();
+		}
+	}
 }
