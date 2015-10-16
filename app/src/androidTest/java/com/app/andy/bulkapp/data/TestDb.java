@@ -27,13 +27,13 @@ public class TestDb extends AndroidTestCase {
 
 	public void testCreateDb() throws Throwable {
 		mContext.deleteDatabase(BulkDbHelper.DATABASE_NAME);
-		SQLiteDatabase db = new BulkDbHelper(this.mContext).getWritableDatabase();
+		SQLiteDatabase db = BulkDbHelper.getIntance(mContext).getWritableDatabase();
 		assertEquals(true, db.isOpen());
 		db.close();
 	}
 
 	public void testInsertDb() {
-		BulkDbHelper dbHelper = new BulkDbHelper(mContext);
+		BulkDbHelper dbHelper = BulkDbHelper.getIntance(mContext);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 
 		ContentValues testValues = fakeValues(100);
@@ -57,7 +57,7 @@ public class TestDb extends AndroidTestCase {
 	}
 
 	public void testDeleteRow() {
-		BulkDbHelper dbHelper = new BulkDbHelper(mContext);
+		BulkDbHelper dbHelper = BulkDbHelper.getIntance(mContext);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		long testRowId = db.insert(BulkContract.FoodItemEntry.TABLE_NAME, null, fakeValues(200));
 
@@ -72,7 +72,7 @@ public class TestDb extends AndroidTestCase {
 	}
 
 	public void testDeleteWhereRow() {
-		BulkDbHelper dbHelper = new BulkDbHelper(mContext);
+		BulkDbHelper dbHelper = BulkDbHelper.getIntance(mContext);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		long testRowId = db.insert(BulkContract.FoodItemEntry.TABLE_NAME, null, fakeValues(200));
 		long testRowId2 = db.insert(BulkContract.FoodItemEntry.TABLE_NAME, null, fakeValues(400));

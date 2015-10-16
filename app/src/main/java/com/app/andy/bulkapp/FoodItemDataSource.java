@@ -63,6 +63,26 @@ public class FoodItemDataSource {
 	}
 
 	/**
+	 * Delete all item
+	 * @return the row affected
+	 */
+	public long deleteAllItem() {
+		return database.delete(BulkContract.FoodItemEntry.TABLE_NAME, "1", null);
+	}
+
+	public Cursor queryToday(String date){
+		String query[] = {BulkContract.FoodItemEntry.COLUMN_CALORIE_COUNT};
+		Cursor cursor = database.query(BulkContract.FoodItemEntry.TABLE_NAME,
+				query,
+				BulkContract.FoodItemEntry.COLUMN_DATE+"=\""+date+"\"",
+				null,
+				null,
+				null,
+				null);
+		return cursor;
+	}
+
+	/**
 	 * Get all the items in db
 	 *
 	 * @return

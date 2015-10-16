@@ -23,7 +23,7 @@ public class BulkDbHelper extends SQLiteOpenHelper {
 		return mDbHelper;
 	}
 
-	public BulkDbHelper(Context context) {
+	private BulkDbHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		this.mContext = context;
 	}

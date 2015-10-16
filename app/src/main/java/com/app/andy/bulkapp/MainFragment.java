@@ -1,6 +1,9 @@
 package com.app.andy.bulkapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,6 +32,7 @@ public class MainFragment extends Fragment {
 	private FoodItemDataSource dataSource;
 	private static final String LOG_TAG = "Bulk Fragment";
 	private ListShowListener showListener;
+	private TextView achievedText;
 
 	public static interface ListShowListener {
 		public void onListShow();
@@ -83,8 +87,9 @@ public class MainFragment extends Fragment {
 	 */
 	private void init(View view) {
 		TextView dateText = (TextView) view.findViewById(R.id.dateTextView);
-		DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
-		dateText.setText(format.format(new Date()));
+		dateText.setText(getDate());
+		achievedText = (TextView) view.findViewById(R.id.achieveText);
+		achievedText.setText("Achieved: " + getAchieved());
 		foodNameEdit = (EditText) view.findViewById(R.id.foodEditText);
 		calorieCountEdit = (EditText) view.findViewById(R.id.calEditText);
 	}
@@ -96,6 +101,16 @@ public class MainFragment extends Fragment {
 	private String getDate() {
 		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
 		return formatter.format(new Date()).toString();
+	}
+
+	private String getAchieved(){
+		Cursor cursor = dataSource.queryToday(getDate());
+		int sum = 0;
+		while(cursor.moveToNext()){
+			sum += cursor.getInt(0);
+			Log.v(LOG_TAG, cursor.getString(0));
+		}
+		return Integer.toString(sum);
 	}
 
 	/**
@@ -124,6 +139,9 @@ public class MainFragment extends Fragment {
 					} else {
 						Log.v(LOG_TAG, "Insert successful" + id);
 					}
+					foodNameEdit.setText("");
+					calorieCountEdit.setText("");
+					achievedText.setText("Achieved: " + getAchieved());
 				}
 				break;
 			case R.id.showListButton:
@@ -132,6 +150,26 @@ public class MainFragment extends Fragment {
 				}
 				break;
 			case R.id.deleteAllButton:
+				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+				builder.setMessage("Are you sure you want to delete all entries?");
+				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						long id = dataSource.deleteAllItem();
+						if (id > 0)
+							Log.v("Delete action", Long.toString(id));
+						else {
+							Log.v("Delete action", "none");
+						}
+					}
+				});
+				builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+					}
+				});
+				AlertDialog dialog = builder.create();
+				dialog.show();
 				break;
 			default:
 				Log.e(LOG_TAG, "Invalid button");
