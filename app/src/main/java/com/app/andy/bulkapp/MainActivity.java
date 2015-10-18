@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.List
 		ft.commit();
 	}
 
-	public void onClick(View v){
+	public void onClick(View v) {
 		mainFragment.onClick(v);
 	}
 

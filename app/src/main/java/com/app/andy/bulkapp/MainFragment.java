@@ -1,12 +1,16 @@
 package com.app.andy.bulkapp;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,25 +31,38 @@ import java.util.Date;
  */
 public class MainFragment extends Fragment {
 
-	private Button submit, showList;
-	private EditText foodNameEdit, calorieCountEdit;
+	private EditText foodNameEdit, calorieCountEdit, goalEditText;
 	private FoodItemDataSource dataSource;
 	private static final String LOG_TAG = "Bulk Fragment";
 	private ListShowListener showListener;
 	private TextView achievedText;
+	private SharedPreferences sharedPreferences;
+	private int goal;
+	private final int SHARED_PREF_DEF_VALUE = -100;
 
-	public static interface ListShowListener {
-		public void onListShow();
+	public interface ListShowListener {
+		void onListShow();
 	}
 
 	@Override
 	public void onAttach(Context context) {
 		super.onAttach(context);
 		Log.e(LOG_TAG, "attached");
-		try{
+		try {
 			showListener = (ListShowListener) context;
-		}catch (ClassCastException e){
+		}
+		catch (ClassCastException e) {
 			throw new ClassCastException(context.toString() + " didnt implement!!!");
+		}
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+		goal = sharedPreferences.getInt("calorie_goal", SHARED_PREF_DEF_VALUE);
+		if (goal == SHARED_PREF_DEF_VALUE) {
+			promptGoalDialog();
 		}
 	}
 
@@ -80,6 +97,7 @@ public class MainFragment extends Fragment {
 		}
 		super.onResume();
 	}
+
 	/**
 	 * Initilize the view
 	 *
@@ -88,6 +106,10 @@ public class MainFragment extends Fragment {
 	private void init(View view) {
 		TextView dateText = (TextView) view.findViewById(R.id.dateTextView);
 		dateText.setText(getDate());
+		goalEditText = (EditText) view.findViewById(R.id.goalEditText);
+		if (goal != SHARED_PREF_DEF_VALUE) {
+			goalEditText.setText(Integer.toString(goal));
+		}
 		achievedText = (TextView) view.findViewById(R.id.achieveText);
 		achievedText.setText("Achieved: " + getAchieved());
 		foodNameEdit = (EditText) view.findViewById(R.id.foodEditText);
@@ -96,6 +118,7 @@ public class MainFragment extends Fragment {
 
 	/**
 	 * Return appropriate date format
+	 *
 	 * @return
 	 */
 	private String getDate() {
@@ -103,10 +126,10 @@ public class MainFragment extends Fragment {
 		return formatter.format(new Date()).toString();
 	}
 
-	private String getAchieved(){
+	private String getAchieved() {
 		Cursor cursor = dataSource.queryToday(getDate());
 		int sum = 0;
-		while(cursor.moveToNext()){
+		while (cursor.moveToNext()) {
 			sum += cursor.getInt(0);
 			Log.v(LOG_TAG, cursor.getString(0));
 		}
@@ -115,10 +138,11 @@ public class MainFragment extends Fragment {
 
 	/**
 	 * The onClick listener
+	 *
 	 * @param v
 	 */
-	public void onClick(View v){
-		switch(v.getId()){
+	public void onClick(View v) {
+		switch (v.getId()) {
 			case R.id.submitButton:
 				String foodName = foodNameEdit.getText().toString();
 				String calorieCount = calorieCountEdit.getText().toString();
@@ -156,9 +180,7 @@ public class MainFragment extends Fragment {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						long id = dataSource.deleteAllItem();
-						if (id > 0)
-							Log.v("Delete action", Long.toString(id));
-						else {
+						if (id > 0) { Log.v("Delete action", Long.toString(id)); } else {
 							Log.v("Delete action", "none");
 						}
 					}
@@ -171,9 +193,53 @@ public class MainFragment extends Fragment {
 				AlertDialog dialog = builder.create();
 				dialog.show();
 				break;
+			case R.id.goalSaveButton:
+				promptGoalDialog();
+				break;
 			default:
 				Log.e(LOG_TAG, "Invalid button");
 				throw new IllegalArgumentException();
 		}
+	}
+
+	private void promptGoalDialog() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setMessage("Enter your daily calorie goal");
+		final EditText input = new EditText(getContext());
+		InputFilter filter[] = new InputFilter[1];
+		filter[0] = new InputFilter.LengthFilter(8);
+		input.setFilters(filter);
+		input.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+		builder.setView(input);
+		builder.setNeutralButton("Done", null);
+		AlertDialog dialog = builder.create();
+		dialog.show();
+
+		Button button = dialog.getButton(DialogInterface.BUTTON_NEUTRAL);
+		button.setOnClickListener(new View.OnClickListener() {
+
+			private Dialog dialog;
+
+			@Override
+			public void onClick(View view) {
+				String calorieAmount = input.getText().toString();
+				if (calorieAmount.equals("")) {
+					Toast.makeText(getActivity().getBaseContext(), "You need to enter a calorie count, You can change this later!", Toast.LENGTH_SHORT).show();
+				} else {
+					Log.v(LOG_TAG, calorieAmount);
+					SharedPreferences.Editor editor = sharedPreferences.edit();
+					editor.putInt("calorie_goal", Integer.parseInt(calorieAmount));
+					editor.apply();
+					goalEditText.setText(calorieAmount);
+					dialog.dismiss();
+				}
+			}
+
+			public View.OnClickListener init(Dialog dialog) {
+				this.dialog = dialog;
+				return this;
+			}
+		}.init(dialog));
 	}
 }
