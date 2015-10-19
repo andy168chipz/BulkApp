@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.List
 		setContentView(R.layout.activity_main);
 		ft = getSupportFragmentManager().beginTransaction();
 		ft.add(R.id.placeholder, mainFragment = new MainFragment());
-		ft.addToBackStack(null);
 		ft.commit();
 	}
 	

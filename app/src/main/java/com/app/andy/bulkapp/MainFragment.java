@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,7 +23,6 @@ import android.widget.Toast;
 
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -37,7 +37,7 @@ public class MainFragment extends Fragment {
 	private ListShowListener showListener;
 	private TextView achievedText;
 	private SharedPreferences sharedPreferences;
-	private int goal;
+	private int goal, achieved;
 	private final int SHARED_PREF_DEF_VALUE = -100;
 
 	public interface ListShowListener {
@@ -110,8 +110,10 @@ public class MainFragment extends Fragment {
 		if (goal != SHARED_PREF_DEF_VALUE) {
 			goalEditText.setText(Integer.toString(goal));
 		}
+		achieved = getAchieved();
 		achievedText = (TextView) view.findViewById(R.id.achieveText);
-		achievedText.setText("Achieved: " + getAchieved());
+		achievedText.setText("Achieved: " + Integer.toString(achieved));
+		achievedText.setTextColor(achieved > goal ? Color.GREEN : Color.RED);
 		foodNameEdit = (EditText) view.findViewById(R.id.foodEditText);
 		calorieCountEdit = (EditText) view.findViewById(R.id.calEditText);
 	}
@@ -122,18 +124,18 @@ public class MainFragment extends Fragment {
 	 * @return
 	 */
 	private String getDate() {
-		DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+		DateFormat formatter = DateFormat.getDateInstance();
 		return formatter.format(new Date()).toString();
 	}
 
-	private String getAchieved() {
+	private int getAchieved() {
 		Cursor cursor = dataSource.queryToday(getDate());
 		int sum = 0;
 		while (cursor.moveToNext()) {
 			sum += cursor.getInt(0);
 			Log.v(LOG_TAG, cursor.getString(0));
 		}
-		return Integer.toString(sum);
+		return sum;
 	}
 
 	/**
