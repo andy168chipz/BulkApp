@@ -3,4 +3,38 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Static strings -->
+    <string name="goal">Goal:</string>
+    <string name="achieved">Achieved:\u0020</string>
+    <string name="food_name">Food name</string>
+    <string name="calorie">Calorie</string>
+    <string name="date">Date</string>
+    <string name="food">Food</string>
+    <!-- Hints -->
+    <string name="food_name_hint">Name of food item</string>
+    <string name="calorie_hint">Total calorie of food item</string>
+    <string name="calorie_rule">(Numbers only)</string>
+
+    <!-- Toast warnings -->
+    <string name="warning_enter_food">You didn\'t enter a food name!</string>
+    <string name="warning_enter_calorie">You didn\'t enter a calorie count!</string>
+    <string name="warning_enter_calorie2">You need to enter a calorie count, You can change this later!</string>
+
+    <!-- Toast response -->
+    <string name="error_insert">There was an error inserting</string>
+    <string name="success_insert">Submit successful!</string>
+
+    <!-- Prompts -->
+    <string name="prompt_enter_goal">Enter your daily calorie goal</string>
+    <string name="prompt_delete_all">Are you sure you want to delete all entries?</string>
+
+    <!-- Buttons -->
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="done">Done</string>
+    <string name="edit">Edit</string>
+    <string name="submit">Submit</string>
+    <string name="show_all">Show All</string>
+
 </resources>

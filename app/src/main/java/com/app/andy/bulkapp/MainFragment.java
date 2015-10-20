@@ -31,13 +31,14 @@ import java.util.Date;
  */
 public class MainFragment extends Fragment {
 
-	private EditText foodNameEdit, calorieCountEdit, goalEditText;
+	private EditText foodNameEdit, calorieCountEdit;
 	private FoodItemDataSource dataSource;
 	private static final String LOG_TAG = "Bulk Fragment";
 	private ListShowListener showListener;
-	private TextView achievedText;
+	private TextView achievedText, goalEditText;
 	private SharedPreferences sharedPreferences;
 	private int goal, achieved;
+	private final String CALORIE_GOAL = "calorie_goal";
 	private final int SHARED_PREF_DEF_VALUE = -100;
 
 	public interface ListShowListener {
@@ -59,16 +60,17 @@ public class MainFragment extends Fragment {
 	@Override
 	public void onCreate(@Nullable Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-		goal = sharedPreferences.getInt("calorie_goal", SHARED_PREF_DEF_VALUE);
-		if (goal == SHARED_PREF_DEF_VALUE) {
-			promptGoalDialog();
-		}
+
 	}
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+		goal = sharedPreferences.getInt(CALORIE_GOAL, SHARED_PREF_DEF_VALUE);
+		if (goal == SHARED_PREF_DEF_VALUE) {
+			promptGoalDialog();
+		}
 		View view = inflater.inflate(R.layout.main_fragment, container, false);
 		dataSource = new FoodItemDataSource(getActivity());
 		try {
@@ -106,13 +108,13 @@ public class MainFragment extends Fragment {
 	private void init(View view) {
 		TextView dateText = (TextView) view.findViewById(R.id.dateTextView);
 		dateText.setText(getDate());
-		goalEditText = (EditText) view.findViewById(R.id.goalEditText);
+		goalEditText = (TextView) view.findViewById(R.id.goalTextView);
 		if (goal != SHARED_PREF_DEF_VALUE) {
 			goalEditText.setText(Integer.toString(goal));
 		}
 		achieved = getAchieved();
 		achievedText = (TextView) view.findViewById(R.id.achieveText);
-		achievedText.setText("Achieved: " + Integer.toString(achieved));
+		achievedText.setText(getContext().getString(R.string.achieved) + Integer.toString(achieved));
 		achievedText.setTextColor(achieved > goal ? Color.GREEN : Color.RED);
 		foodNameEdit = (EditText) view.findViewById(R.id.foodEditText);
 		calorieCountEdit = (EditText) view.findViewById(R.id.calEditText);
@@ -149,10 +151,10 @@ public class MainFragment extends Fragment {
 				String foodName = foodNameEdit.getText().toString();
 				String calorieCount = calorieCountEdit.getText().toString();
 				if (foodName.equals("")) {
-					Toast.makeText(getActivity().getBaseContext(), "You didn't enter a food name!", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity().getBaseContext(), R.string.warning_enter_food, Toast.LENGTH_SHORT).show();
 					return;
 				} else if (calorieCount.equals("")) {
-					Toast.makeText(getActivity().getBaseContext(), "You didn't enter a calorie count!", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity().getBaseContext(), R.string.warning_enter_calorie, Toast.LENGTH_SHORT).show();
 					return;
 				}
 				//do save action
@@ -160,14 +162,14 @@ public class MainFragment extends Fragment {
 					FoodItem item = new FoodItem(foodName, Double.parseDouble(calorieCount), getDate());
 					long id = dataSource.insertFoodItem(item);
 					if (id == -1) {
-						Toast.makeText(getActivity().getBaseContext(), "There was an error inserting", Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity().getBaseContext(), R.string.error_insert, Toast.LENGTH_SHORT).show();
 						Log.v("saveAction:", foodName + " " + calorieCount);
 					} else {
-						Log.v(LOG_TAG, "Insert successful" + id);
+						Log.v(LOG_TAG, R.string.success_insert + Long.toString(id));
 					}
 					foodNameEdit.setText("");
 					calorieCountEdit.setText("");
-					achievedText.setText("Achieved: " + getAchieved());
+					achievedText.setText(getContext().getString(R.string.achieved) + getAchieved());
 				}
 				break;
 			case R.id.showListButton:
@@ -177,8 +179,8 @@ public class MainFragment extends Fragment {
 				break;
 			case R.id.deleteAllButton:
 				AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-				builder.setMessage("Are you sure you want to delete all entries?");
-				builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+				builder.setMessage(R.string.prompt_delete_all);
+				builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						long id = dataSource.deleteAllItem();
@@ -187,7 +189,7 @@ public class MainFragment extends Fragment {
 						}
 					}
 				});
-				builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+				builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 					}
@@ -206,7 +208,7 @@ public class MainFragment extends Fragment {
 
 	private void promptGoalDialog() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-		builder.setMessage("Enter your daily calorie goal");
+		builder.setMessage(R.string.prompt_enter_goal);
 		final EditText input = new EditText(getContext());
 		InputFilter filter[] = new InputFilter[1];
 		filter[0] = new InputFilter.LengthFilter(8);
@@ -214,7 +216,7 @@ public class MainFragment extends Fragment {
 		input.setInputType(InputType.TYPE_CLASS_NUMBER);
 
 		builder.setView(input);
-		builder.setNeutralButton("Done", null);
+		builder.setNeutralButton(R.string.done, null);
 		AlertDialog dialog = builder.create();
 		dialog.show();
 
@@ -227,11 +229,11 @@ public class MainFragment extends Fragment {
 			public void onClick(View view) {
 				String calorieAmount = input.getText().toString();
 				if (calorieAmount.equals("")) {
-					Toast.makeText(getActivity().getBaseContext(), "You need to enter a calorie count, You can change this later!", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity().getBaseContext(), R.string.warning_enter_calorie2, Toast.LENGTH_SHORT).show();
 				} else {
 					Log.v(LOG_TAG, calorieAmount);
 					SharedPreferences.Editor editor = sharedPreferences.edit();
-					editor.putInt("calorie_goal", Integer.parseInt(calorieAmount));
+					editor.putInt(CALORIE_GOAL, Integer.parseInt(calorieAmount));
 					editor.apply();
 					goalEditText.setText(calorieAmount);
 					dialog.dismiss();

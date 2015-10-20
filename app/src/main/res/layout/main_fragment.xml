@@ -16,22 +16,22 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Goal"
-            android:textSize="40sp"
+            android:text="@string/goal"
+            android:textSize="30sp"
             android:id="@+id/goalText"/>
 
-        <EditText
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:hint="Today's Calorie Goal"
             android:layout_marginLeft="10dp"
-            android:id="@+id/goalEditText"
+            android:id="@+id/goalTextView"
+            android:textSize="30sp"
             android:layout_weight="1"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit"
+            android:text="@string/edit"
             android:id="@+id/goalSaveButton"
             android:onClick="onClick"
             />
@@ -43,8 +43,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Achieved"
-            android:textSize="40sp"
+            android:text="@string/achieved"
+            android:textSize="30sp"
             android:id="@+id/achieveText"/>
     </LinearLayout>
 
@@ -58,16 +58,16 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Food name"
+        android:text="@string/food_name"
         android:id="@+id/foodTextView"
-        android:textSize="40sp"/>
+        android:textSize="30sp"/>
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/foodEditText"
         android:maxLength="20"
-        android:hint="Name of food item"/>
+        android:hint="@string/food_name_hint"/>
 
     <LinearLayout
         android:orientation="horizontal"
@@ -78,13 +78,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Calorie"
-            android:textSize="40sp"
+            android:text="@string/calorie"
+            android:textSize="30sp"
             android:id="@+id/calTextView"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="(Numbers only)"
+            android:text="@string/calorie_rule"
             android:ellipsize="end"
             android:textSize="18sp"
             android:paddingLeft="10sp"/>
@@ -96,12 +96,12 @@
         android:id="@+id/calEditText"
         android:inputType="numberDecimal"
         android:maxLength="7"
-        android:hint="Total calorie of food item"/>
+        android:hint="@string/calorie_hint"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Submit"
+        android:text="@string/submit"
         android:onClick="onClick"
         android:id="@+id/submitButton"/>
 
@@ -110,7 +110,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/showListButton"
         android:onClick="onClick"
-        android:text="SHOW ALL LIST TEST"/>
+        android:text="@string/show_all"/>
 
     <Button
         android:layout_width="wrap_content"
