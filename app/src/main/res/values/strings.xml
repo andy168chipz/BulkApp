@@ -11,6 +11,7 @@
     <string name="calorie">Calorie</string>
     <string name="date">Date</string>
     <string name="food">Food</string>
+    <string name="edit_entry">Edit Entry</string>
     <!-- Hints -->
     <string name="food_name_hint">Name of food item</string>
     <string name="calorie_hint">Total calorie of food item</string>
