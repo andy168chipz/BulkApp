@@ -20,7 +20,7 @@ public class FoodItemDataSource {
 
 	private SQLiteDatabase database;
 	private BulkDbHelper dbHelper;
-	private String[] allColumns = {BulkContract.FoodItemEntry.COLUMN_FOOD_KEY, BulkContract.FoodItemEntry.COLUMN_CALORIE_COUNT, BulkContract.FoodItemEntry.COLUMN_DATE};
+	private String[] allColumns = {BulkContract.FoodItemEntry._ID, BulkContract.FoodItemEntry.COLUMN_FOOD_KEY, BulkContract.FoodItemEntry.COLUMN_CALORIE_COUNT, BulkContract.FoodItemEntry.COLUMN_DATE};
 
 	/**
 	 * ctor
@@ -64,17 +64,18 @@ public class FoodItemDataSource {
 
 	/**
 	 * Delete all item
+	 *
 	 * @return the row affected
 	 */
 	public long deleteAllItem() {
 		return database.delete(BulkContract.FoodItemEntry.TABLE_NAME, "1", null);
 	}
 
-	public Cursor queryToday(String date){
+	public Cursor queryToday(String date) {
 		String query[] = {BulkContract.FoodItemEntry.COLUMN_CALORIE_COUNT};
 		Cursor cursor = database.query(BulkContract.FoodItemEntry.TABLE_NAME,
 				query,
-				BulkContract.FoodItemEntry.COLUMN_DATE+"=\""+date+"\"",
+				BulkContract.FoodItemEntry.COLUMN_DATE + "=\"" + date + "\"",
 				null,
 				null,
 				null,
@@ -89,7 +90,7 @@ public class FoodItemDataSource {
 	 */
 	public List<FoodItem> getAllItems() {
 		List<FoodItem> items = new ArrayList<FoodItem>();
-		Cursor cursor = database.query(BulkContract.FoodItemEntry.TABLE_NAME, allColumns, null, null, null, null, null);
+		Cursor cursor = database.query(BulkContract.FoodItemEntry.TABLE_NAME, allColumns, null, null, null, null, "_id DESC");
 		cursor.moveToFirst();
 
 		while (!cursor.isAfterLast()) {
@@ -102,6 +103,18 @@ public class FoodItemDataSource {
 	}
 
 	/**
+	 * update a row
+	 * @param item
+	 * @return
+	 */
+	public long updateRows(FoodItem item) {
+		ContentValues values = new ContentValues();
+		values.put(BulkContract.FoodItemEntry.COLUMN_FOOD_KEY, item.getName());
+		values.put(BulkContract.FoodItemEntry.COLUMN_CALORIE_COUNT, item.getCalorie());
+		return database.update(BulkContract.FoodItemEntry.TABLE_NAME, values, "_id="+item.getId(), null);
+	}
+
+	/**
 	 * Convert a cursor object to a FoodItem object
 	 *
 	 * @param cursor
@@ -109,10 +122,10 @@ public class FoodItemDataSource {
 	 */
 	private FoodItem cursorToFoodItem(Cursor cursor) {
 		FoodItem foodItem = new FoodItem();
-		foodItem.setId(cursor.getColumnIndex("_id"));
-		foodItem.setName(cursor.getString(0));
-		foodItem.setCalorie(cursor.getDouble(1));
-		foodItem.setDate(cursor.getString(2));
+		foodItem.setId(cursor.getInt(cursor.getColumnIndex(BulkContract.FoodItemEntry._ID)));
+		foodItem.setName(cursor.getString(1));
+		foodItem.setCalorie(cursor.getDouble(2));
+		foodItem.setDate(cursor.getString(3));
 		return foodItem;
 	}
 

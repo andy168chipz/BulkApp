@@ -1,52 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
+              android:orientation="vertical"
               android:weightSum="1">
+
     <TextView
+        android:id="@+id/dateTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/dateTextView"
         android:textSize="25sp"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
+            android:id="@+id/goalText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/goal"
-            android:textSize="30sp"
-            android:id="@+id/goalText"/>
+            android:textSize="30sp"/>
 
         <TextView
+            android:id="@+id/goalTextView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginLeft="10dp"
-            android:id="@+id/goalTextView"
-            android:textSize="30sp"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textSize="30sp"/>
 
         <Button
+            android:id="@+id/goalSaveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/edit"
-            android:id="@+id/goalSaveButton"
             android:onClick="onClick"
+            android:text="@string/edit"
             />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/achieved"
-            android:textSize="30sp"
-            android:id="@+id/achieveText"/>
-    </LinearLayout>
+
+    <TextView
+        android:id="@+id/achieveText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/achieved"
+        android:textSize="30sp"/>
+
 
     <View
         android:layout_width="match_parent"
@@ -56,66 +57,71 @@
         android:paddingTop="20dp"/>
 
     <TextView
+        android:id="@+id/foodTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/food_name"
-        android:id="@+id/foodTextView"
         android:textSize="30sp"/>
 
     <EditText
+        android:id="@+id/foodEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/foodEditText"
-        android:maxLength="20"
-        android:hint="@string/food_name_hint"/>
+        android:hint="@string/food_name_hint"
+        android:singleLine="true"
+        android:imeOptions="actionNext"
+        android:maxLength="20"/>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/calTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/calorie"
-            android:textSize="30sp"
-            android:id="@+id/calTextView"/>
+            android:textSize="30sp"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/calorie_rule"
             android:ellipsize="end"
-            android:textSize="18sp"
-            android:paddingLeft="10sp"/>
+            android:paddingLeft="10sp"
+            android:text="@string/calorie_rule"
+            android:textSize="18sp"/>
     </LinearLayout>
 
     <EditText
+        android:id="@+id/calEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/calEditText"
+        android:hint="@string/calorie_hint"
         android:inputType="numberDecimal"
-        android:maxLength="7"
-        android:hint="@string/calorie_hint"/>
+        android:singleLine="true"
+        android:imeOptions="actionDone"
+        android:maxLength="7"/>
 
     <Button
+        android:id="@+id/submitButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/submit"
         android:onClick="onClick"
-        android:id="@+id/submitButton"/>
+        android:text="@string/submit"/>
 
     <Button
+        android:id="@+id/showListButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/showListButton"
         android:onClick="onClick"
         android:text="@string/show_all"/>
 
     <Button
+        android:id="@+id/deleteAllButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/deleteAllButton"
         android:onClick="onClick"
         android:text="Delete all data(debug)"/>
 

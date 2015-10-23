@@ -71,6 +71,20 @@ public class TestDb extends AndroidTestCase {
 		dbHelper.close();
 	}
 
+	public void testAlterRow() {
+		BulkDbHelper dbHelper = BulkDbHelper.getIntance(mContext);
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		long testRowId = db.insert(BulkContract.FoodItemEntry.TABLE_NAME, null, fakeValues(200));
+
+		//check at row is valid
+		assertTrue(testRowId != -1);
+
+		long alterId = db.update(BulkContract.FoodItemEntry.TABLE_NAME, fakeValues(600), "_id=" + testRowId, null);
+		assertTrue(alterId == 1);
+		Cursor cursor = db.query(BulkContract.FoodItemEntry.TABLE_NAME, null, "_id=" + testRowId, null, null, null, null);
+		validateCursor(cursor,fakeValues(600));
+	}
+
 	public void testDeleteWhereRow() {
 		BulkDbHelper dbHelper = BulkDbHelper.getIntance(mContext);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();

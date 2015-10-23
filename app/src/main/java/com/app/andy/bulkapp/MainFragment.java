@@ -200,6 +200,9 @@ public class MainFragment extends Fragment {
 			case R.id.goalSaveButton:
 				promptGoalDialog();
 				break;
+			case R.id.dialogDoneButton:
+				Log.v(LOG_TAG, "JKL;jlk");
+				break;
 			default:
 				Log.e(LOG_TAG, "Invalid button");
 				throw new IllegalArgumentException();
