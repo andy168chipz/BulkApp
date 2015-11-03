@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-    android:minWidth="250dp">
+              android:minWidth="250dp"
+              android:orientation="vertical">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/edit_entry"
         android:textSize="30sp"/>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -20,9 +22,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/food_name_hint"
-        android:singleLine="true"
         android:imeOptions="actionNext"
-        android:maxLength="20"/>
+        android:maxLength="20"
+        android:singleLine="true"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,16 +37,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/calorie_hint"
-        android:inputType="numberDecimal"
-        android:singleLine="true"
         android:imeOptions="actionDone"
-        android:maxLength="7"/>
+        android:inputType="numberDecimal"
+        android:maxLength="7"
+        android:singleLine="true"/>
 
     <Button
+        android:id="@+id/dialogDoneButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/dialogDoneButton"
-        android:text="@string/done"
-        android:onClick="onClick"/>
+        android:onClick="onClick"
+        android:text="@string/done"/>
 
 </LinearLayout>
