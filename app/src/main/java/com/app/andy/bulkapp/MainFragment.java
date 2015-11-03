@@ -66,6 +66,7 @@ public class MainFragment extends Fragment {
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		Log.v(LOG_TAG, "getting inflated");
 		sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
 		goal = sharedPreferences.getInt(CALORIE_GOAL, SHARED_PREF_DEF_VALUE);
 		if (goal == SHARED_PREF_DEF_VALUE) {
@@ -112,12 +113,19 @@ public class MainFragment extends Fragment {
 		if (goal != SHARED_PREF_DEF_VALUE) {
 			goalEditText.setText(Integer.toString(goal));
 		}
-		achieved = getAchieved();
 		achievedText = (TextView) view.findViewById(R.id.achieveText);
-		achievedText.setText(getContext().getString(R.string.achieved) + Integer.toString(achieved));
-		achievedText.setTextColor(achieved > goal ? Color.GREEN : Color.RED);
+		setAchievedText();
 		foodNameEdit = (EditText) view.findViewById(R.id.foodEditText);
 		calorieCountEdit = (EditText) view.findViewById(R.id.calEditText);
+	}
+
+	/**
+	 * Set the achievement text
+	 */
+	private void setAchievedText(){
+		achieved = getAchieved();
+		achievedText.setText(getContext().getString(R.string.achieved) + getAchieved());
+		achievedText.setTextColor(achieved > goal ? Color.GREEN : Color.RED);
 	}
 
 	/**
@@ -135,7 +143,6 @@ public class MainFragment extends Fragment {
 		int sum = 0;
 		while (cursor.moveToNext()) {
 			sum += cursor.getInt(0);
-			Log.v(LOG_TAG, cursor.getString(0));
 		}
 		return sum;
 	}
@@ -169,7 +176,7 @@ public class MainFragment extends Fragment {
 					}
 					foodNameEdit.setText("");
 					calorieCountEdit.setText("");
-					achievedText.setText(getContext().getString(R.string.achieved) + getAchieved());
+					setAchievedText();
 				}
 				break;
 			case R.id.showListButton:
