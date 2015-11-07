@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
@@ -125,7 +126,7 @@ public class MainFragment extends Fragment {
 	private void setAchievedText(){
 		achieved = getAchieved();
 		achievedText.setText(getContext().getString(R.string.achieved) + getAchieved());
-		achievedText.setTextColor(achieved > goal ? Color.GREEN : Color.RED);
+		achievedText.setTextColor(achieved > goal ? Color.GREEN : ContextCompat.getColor(getContext(),R.color.light_white));
 	}
 
 	/**
@@ -217,7 +218,7 @@ public class MainFragment extends Fragment {
 	}
 
 	private void promptGoalDialog() {
-		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.DialogStyle);
 		builder.setMessage(R.string.prompt_enter_goal);
 		final EditText input = new EditText(getContext());
 		InputFilter filter[] = new InputFilter[1];

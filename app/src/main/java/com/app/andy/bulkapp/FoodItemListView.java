@@ -50,7 +50,7 @@ public class FoodItemListView extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 		final FoodItem item = (FoodItem) getListAdapter().getItem(position);
-		final Dialog editDialog = new Dialog(mContext);
+		final Dialog editDialog = new Dialog(mContext, R.style.DialogStyle);
 		editDialog.setContentView(R.layout.edit_item_dialog);
 		final EditText foodEditText = (EditText) editDialog.findViewById(R.id.dialogFoodText);
 		foodEditText.setText(item.getName());
